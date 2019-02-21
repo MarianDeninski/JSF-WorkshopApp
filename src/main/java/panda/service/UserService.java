@@ -13,4 +13,6 @@ public interface UserService {
     UserServiceModel findUserByUsername(String username);
 
     List<UserServiceModel> findAllUsers();
+
+    void update(UserServiceModel userServiceModel);
 }

@@ -36,6 +36,7 @@ public class UserLoginBean {
     }
 
     public void setUserLoginBindingModel(UserLoginBindingModel userLoginBindingModel) {
+
         this.userLoginBindingModel = userLoginBindingModel;
     }
 

@@ -3,6 +3,7 @@ package panda.web.beans;
 import org.modelmapper.ModelMapper;
 import panda.domain.models.binding.PackageCreateBindingModel;
 import panda.domain.models.service.PackageServiceModel;
+import panda.domain.models.service.UserServiceModel;
 import panda.service.PackageService;
 import panda.service.UserService;
 
@@ -10,6 +11,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -68,8 +70,13 @@ public class PackageCreateBean {
         PackageServiceModel packageServiceModel = this.modelMapper
                 .map(this.model, PackageServiceModel.class);
 
-        packageServiceModel
-                .setRecipient(this.userService.findUserByUsername(this.model.getRecipient()));
+        HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+                .getExternalContext().getSession(true);
+
+        UserServiceModel userServiceModel = this.userService.findUserByUsername(this.model.getRecipient());
+
+        packageServiceModel.setRecipient(userServiceModel);
+
 
         this.packageService
                 .packageCreate(packageServiceModel);

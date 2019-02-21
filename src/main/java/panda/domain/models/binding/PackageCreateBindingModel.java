@@ -2,6 +2,7 @@ package panda.domain.models.binding;
 
 public class PackageCreateBindingModel {
 
+
     private String description;
     private Double weight;
     private String shippingAddress;
@@ -9,6 +10,8 @@ public class PackageCreateBindingModel {
 
     public PackageCreateBindingModel() {
     }
+
+
 
     public String getDescription() {
         return description;

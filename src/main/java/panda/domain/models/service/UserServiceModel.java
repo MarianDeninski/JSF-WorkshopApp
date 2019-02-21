@@ -1,5 +1,7 @@
 package panda.domain.models.service;
 
+import panda.service.ReceiptService;
+
 import java.util.List;
 
 public class UserServiceModel {
@@ -10,6 +12,8 @@ public class UserServiceModel {
     private String email;
     private String role;
     private List<PackageServiceModel> packages;
+    private List<ReceiptServiceModel> receipts;
+
 
     public UserServiceModel() {
     }
@@ -60,5 +64,18 @@ public class UserServiceModel {
 
     public void setPackages(List<PackageServiceModel> packages) {
         this.packages = packages;
+    }
+
+    public List<ReceiptServiceModel> getReceipts() {
+        return receipts;
+    }
+
+    public void setReceipts(List<ReceiptServiceModel> receipts) {
+        this.receipts = receipts;
+    }
+
+    @Override
+    public String toString() {
+        return this.username;
     }
 }

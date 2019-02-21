@@ -2,8 +2,6 @@ package panda.repository;
 
 import panda.domain.entities.Package;
 import panda.domain.entities.Status;
-import panda.domain.entities.User;
-import panda.domain.models.service.PackageServiceModel;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -11,7 +9,11 @@ import java.util.List;
 
 public class PackageRepositoryImpl implements PackageRepository {
 
-    private final EntityManager entityManager;
+    private  EntityManager entityManager;
+
+
+    public PackageRepositoryImpl() {
+    }
 
     @Inject
     public PackageRepositoryImpl(EntityManager entityManager) {

@@ -1,8 +1,10 @@
 package panda.web.beans;
 
 import org.modelmapper.ModelMapper;
+import panda.domain.entities.Status;
 import panda.domain.models.service.UserServiceModel;
 import panda.domain.models.view.PackageViewModel;
+import panda.service.PackageService;
 import panda.service.UserService;
 
 import javax.enterprise.context.RequestScoped;
@@ -23,14 +25,16 @@ public class HomeBean {
 
     private UserService userService;
     private ModelMapper modelMapper;
+    private PackageService packageService;
 
     public HomeBean() {
     }
 
     @Inject
-    public HomeBean(UserService userService, ModelMapper modelMapper) {
+    public HomeBean(UserService userService, ModelMapper modelMapper,PackageService packageService) {
         this.userService = userService;
         this.modelMapper = modelMapper;
+        this.packageService = packageService;
         this.initPackages();
     }
 
@@ -41,26 +45,39 @@ public class HomeBean {
                         .getExternalContext()
                         .getSession(true)).getAttribute("username"));
 
-        this.pendingPackages = userServiceModel
-                .getPackages()
-                .stream()
-                .filter(p -> p.getStatus().name().equals("Pending"))
-                .map(p -> this.modelMapper.map(p, PackageViewModel.class))
-                .collect(Collectors.toList());
+        if(userServiceModel.getRole().equals("Admin")){
 
-        this.shippedPackages = userServiceModel
-                .getPackages()
-                .stream()
-                .filter(p -> p.getStatus().name().equals("Shipped"))
-                .map(p -> this.modelMapper.map(p, PackageViewModel.class))
-                .collect(Collectors.toList());
+            this.pendingPackages = packageService.findAllPackagesByStatus(Status.Pending).stream()
+                    .map(p -> this.modelMapper.map(p,PackageViewModel.class)).collect(Collectors.toList());
 
-        this.deliveredPackages = userServiceModel
-                .getPackages()
-                .stream()
-                .filter(p -> p.getStatus().name().equals("Delivered"))
-                .map(p -> this.modelMapper.map(p, PackageViewModel.class))
-                .collect(Collectors.toList());
+            this.shippedPackages = packageService.findAllPackagesByStatus(Status.Shipped).stream()
+                    .map(p -> this.modelMapper.map(p,PackageViewModel.class)).collect(Collectors.toList());
+
+            this.deliveredPackages = packageService.findAllPackagesByStatus(Status.Delivered).stream()
+                    .map(p -> this.modelMapper.map(p,PackageViewModel.class)).collect(Collectors.toList());
+
+        }else {
+            this.pendingPackages = userServiceModel
+                    .getPackages()
+                    .stream()
+                    .filter(p -> p.getStatus().name().equals("Pending"))
+                    .map(p -> this.modelMapper.map(p, PackageViewModel.class))
+                    .collect(Collectors.toList());
+
+            this.shippedPackages = userServiceModel
+                    .getPackages()
+                    .stream()
+                    .filter(p -> p.getStatus().name().equals("Shipped"))
+                    .map(p -> this.modelMapper.map(p, PackageViewModel.class))
+                    .collect(Collectors.toList());
+
+            this.deliveredPackages = userServiceModel
+                    .getPackages()
+                    .stream()
+                    .filter(p -> p.getStatus().name().equals("Delivered"))
+                    .map(p -> this.modelMapper.map(p, PackageViewModel.class))
+                    .collect(Collectors.toList());
+        }
     }
 
     public List<PackageViewModel> getPendingPackages() {

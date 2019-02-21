@@ -11,6 +11,8 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,12 +20,15 @@ import java.util.stream.Collectors;
 @RequestScoped
 public class PendingPackagesBean {
 
+
     private List<PackageViewModel> packages;
+    private PackageViewModel packageViewModel;
 
     private PackageService packageService;
     private ModelMapper modelMapper;
 
     public PendingPackagesBean() {
+
     }
 
     @Inject
@@ -31,15 +36,21 @@ public class PendingPackagesBean {
         this.packageService = packageService;
         this.modelMapper = modelMapper;
         this.initPackages();
+
+
     }
 
+
     private void initPackages() {
+
+
+
         this.packages = this.packageService
                 .findAllPackagesByStatus(Status.Pending)
                 .stream()
                 .map(p -> {
                     PackageViewModel packageViewModel = this.modelMapper.map(p, PackageViewModel.class);
-                    packageViewModel.setRecipient(p.getRecipient().getUsername());
+//                    packageViewModel.setRecipient(p.getRecipient().getUsername());
 
                     return packageViewModel;
                 })
@@ -52,6 +63,11 @@ public class PendingPackagesBean {
 
     public void setPackages(List<PackageViewModel> packages) {
         this.packages = packages;
+    }
+
+    public PackageViewModel getPackageViewModel(String str) {
+        this.packageViewModel = this.modelMapper.map(this.packageService.findById(str),PackageViewModel.class);
+        return packageViewModel;
     }
 
     public void changeStatus(String id) throws IOException {

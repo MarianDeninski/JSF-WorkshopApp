@@ -8,7 +8,11 @@ import java.util.List;
 
 public class UserRepositoryImpl implements UserRepository {
 
-    private final EntityManager entityManager;
+    private  EntityManager entityManager;
+
+
+    public UserRepositoryImpl() {
+    }
 
     @Inject
     public UserRepositoryImpl(EntityManager entityManager) {
@@ -74,5 +78,14 @@ public class UserRepositoryImpl implements UserRepository {
 
             return null;
         }
+    }
+
+    @Override
+    public void update(User user) {
+
+        this.entityManager.clear();
+        this.entityManager.getTransaction().begin();
+        this.entityManager.merge(user);
+        this.entityManager.getTransaction().commit();
     }
 }

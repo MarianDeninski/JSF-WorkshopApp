@@ -13,7 +13,7 @@ public class PackageViewModel {
     private String shippingAddress;
     private Status status;
     private LocalDateTime estimatedDeliveryTime;
-    private String recipient;
+    private UserViewModel recipient;
 
     public PackageViewModel() {
     }
@@ -66,11 +66,11 @@ public class PackageViewModel {
         this.estimatedDeliveryTime = estimatedDeliveryTime;
     }
 
-    public String getRecipient() {
+    public UserViewModel getRecipient() {
         return recipient;
     }
 
-    public void setRecipient(String recipient) {
+    public void setRecipient(UserViewModel recipient) {
         this.recipient = recipient;
     }
 }

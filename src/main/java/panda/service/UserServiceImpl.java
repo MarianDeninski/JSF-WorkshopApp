@@ -12,8 +12,12 @@ import java.util.stream.Collectors;
 
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository userRepository;
-    private final ModelMapper modelMapper;
+    private  UserRepository userRepository;
+    private  ModelMapper modelMapper;
+
+
+    public UserServiceImpl() {
+    }
 
     @Inject
     public UserServiceImpl(UserRepository userRepository, ModelMapper modelMapper) {
@@ -56,5 +60,11 @@ public class UserServiceImpl implements UserService {
 
     private void setUserRole(User user) {
         user.setRole(this.userRepository.size() == 0 ? "Admin" : "User");
+    }
+
+    @Override
+    public void update(UserServiceModel userServiceModel) {
+
+        this.userRepository.update(this.modelMapper.map(userServiceModel,User.class));
     }
 }

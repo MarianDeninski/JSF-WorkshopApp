@@ -14,8 +14,12 @@ import java.util.stream.Collectors;
 
 public class PackageServiceImpl implements PackageService {
 
-    private final PackageRepository packageRepository;
-    private final ModelMapper modelMapper;
+    private  PackageRepository packageRepository;
+    private  ModelMapper modelMapper;
+
+
+    public PackageServiceImpl() {
+    }
 
     @Inject
     public PackageServiceImpl(PackageRepository packageRepository, ModelMapper modelMapper) {
@@ -43,19 +47,29 @@ public class PackageServiceImpl implements PackageService {
     @Override
     public void packageStatusChange(String id) {
         Package aPackage = this.packageRepository.findById(id);
-        this.changeStatus(aPackage);
-        this.changeDeliveryDate(aPackage);
+
+        if(aPackage.getStatus().equals("Shipped")){
+            this.changeStatus(aPackage);
+        }else{
+            this.changeStatus(aPackage);
+            this.changeDeliveryDate(aPackage);
+        }
+
 
         this.packageRepository.updatePackage(aPackage);
     }
 
     private void changeStatus(Package aPackage) {
-        aPackage
-                .setStatus(Status.values()[Arrays.asList(Status.values()).indexOf(aPackage.getStatus()) + 1]);
+        aPackage.setStatus(Status.values()[Arrays.asList(Status.values()).indexOf(aPackage.getStatus()) + 1]);
     }
 
     private void changeDeliveryDate(Package aPackage) {
         long days = (System.currentTimeMillis() % 21) + 20;
         aPackage.setEstimatedDeliveryTime(LocalDateTime.now().plusDays(days));
+    }
+
+    @Override
+    public PackageServiceModel findById(String id) {
+        return this.modelMapper.map(this.packageRepository.findById(id),PackageServiceModel.class);
     }
 }

@@ -60,5 +60,11 @@
             <artifactId>commons-codec</artifactId>
             <version>1.6</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.primefaces</groupId>
+            <artifactId>primefaces</artifactId>
+            <version>6.2</version>
+        </dependency>
     </dependencies>
 </project>

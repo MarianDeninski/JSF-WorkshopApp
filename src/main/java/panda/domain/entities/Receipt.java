@@ -10,8 +10,9 @@ public class Receipt extends BaseEntity {
 
     private BigDecimal fee;
     private LocalDateTime issuedOn;
-    private User recipient;
     private Package aPackage;
+    private User recipient;
+
 
     public Receipt() {
     }
@@ -34,6 +35,19 @@ public class Receipt extends BaseEntity {
         this.issuedOn = issuedOn;
     }
 
+    @OneToOne(targetEntity = Package.class)
+    @JoinColumn(
+            name = "package_id",
+            referencedColumnName = "id"
+    )
+    public Package getaPackage() {
+        return aPackage;
+    }
+
+    public void setaPackage(Package aPackage) {
+        this.aPackage = aPackage;
+    }
+
     @ManyToOne(targetEntity = User.class)
     @JoinColumn(
             name = "recipient_id",
@@ -47,16 +61,5 @@ public class Receipt extends BaseEntity {
         this.recipient = recipient;
     }
 
-    @OneToOne(targetEntity = Package.class)
-    @JoinColumn(
-            name = "package_id",
-            referencedColumnName = "id"
-    )
-    public Package getaPackage() {
-        return aPackage;
-    }
 
-    public void setaPackage(Package aPackage) {
-        this.aPackage = aPackage;
-    }
 }
